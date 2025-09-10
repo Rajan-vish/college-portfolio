@@ -1,15 +1,12 @@
-databases:
-  - name: college-events-db
-    databaseName: college-events
-    user: college-events-user
-
 services:
   # Backend API Service
   - type: web
     name: college-event-portal-api
-    runtime: node
+    env: node
+    plan: free
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,29 +14,21 @@ services:
         generateValue: true
       - key: JWT_EXPIRE
         value: 30d
-      - key: PORT
-        value: 5000
       - key: MONGODB_URI
         value: mongodb+srv://rajanvish2005:Ay2b3vylXNW53ghv@cluster1.4yireiy.mongodb.net/college-events
       - key: CLIENT_URL
-        fromService:
-          type: web
-          name: college-event-portal-frontend
-          property: url
-    healthCheckPath: /health
+        value: https://college-event-portal-frontend.onrender.com
 
-  # Frontend React Service
-  - type: web
+  # Frontend Static Service
+  - type: static
     name: college-event-portal-frontend
-    runtime: node
+    env: static
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/build
+    staticPublishPath: ./frontend/dist
     buildFilter:
       paths:
         - frontend/**
     envVars:
-      - key: REACT_APP_API_URL
-        fromService:
-          type: web
-          name: college-event-portal-api
-          property: url
+      - key: VITE_API_URL
+        value: https://college-event-portal-api.onrender.com/api
