@@ -25,56 +25,113 @@ import Profile from './pages/Profile/Profile'
 import MyRegistrations from './pages/Registrations/MyRegistrations'
 import NotFound from './pages/NotFound/NotFound'
 
-// Create theme
+// Create dark theme
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
+      main: '#90caf9',
+      light: '#e3f2fd',
+      dark: '#42a5f5',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#f48fb1',
+      light: '#fce4ec',
+      dark: '#e91e63',
     },
     background: {
-      default: '#f5f5f5',
-      paper: '#ffffff',
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#b3b3b3',
+    },
+    divider: '#333333',
+    action: {
+      hover: 'rgba(255, 255, 255, 0.08)',
+      selected: 'rgba(255, 255, 255, 0.12)',
+      disabled: 'rgba(255, 255, 255, 0.3)',
+    },
+    success: {
+      main: '#66bb6a',
+      dark: '#4caf50',
+    },
+    warning: {
+      main: '#ffa726',
+      dark: '#ff9800',
+    },
+    error: {
+      main: '#ef5350',
+      dark: '#f44336',
+    },
+    info: {
+      main: '#29b6f6',
+      dark: '#03a9f4',
     },
   },
   typography: {
     fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-    h1: {
-      fontWeight: 700,
-    },
-    h2: {
-      fontWeight: 600,
-    },
-    h3: {
-      fontWeight: 600,
-    },
-    h4: {
-      fontWeight: 500,
-    },
-    h5: {
-      fontWeight: 500,
-    },
-    h6: {
-      fontWeight: 500,
-    },
+    h1: { fontWeight: 700, color: '#ffffff' },
+    h2: { fontWeight: 600, color: '#ffffff' },
+    h3: { fontWeight: 600, color: '#ffffff' },
+    h4: { fontWeight: 500, color: '#ffffff' },
+    h5: { fontWeight: 500, color: '#ffffff' },
+    h6: { fontWeight: 500, color: '#ffffff' },
   },
   components: {
-    MuiButton: {
+    MuiButton: { 
+      styleOverrides: { 
+        root: { 
+          textTransform: 'none', 
+          fontWeight: 500,
+          borderRadius: 8,
+        } 
+      } 
+    },
+    MuiCard: { 
+      styleOverrides: { 
+        root: { 
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          backgroundColor: '#1e1e1e',
+          border: '1px solid #333333',
+        } 
+      } 
+    },
+    MuiPaper: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
-          fontWeight: 500,
+          backgroundColor: '#1e1e1e',
+          border: '1px solid #333333',
+        }
+      }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#444444',
+            },
+            '&:hover fieldset': {
+              borderColor: '#666666',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#90caf9',
+            },
+          },
         },
       },
     },
-    MuiCard: {
+    MuiChip: {
       styleOverrides: {
         root: {
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          backgroundColor: '#333333',
+          color: '#ffffff',
+          '&.MuiChip-colorPrimary': {
+            backgroundColor: '#1976d2',
+            color: '#ffffff',
+          },
         },
       },
     },
@@ -83,12 +140,7 @@ const theme = createTheme({
 
 // Create a client
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
+  defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 })
 
 function App() {
@@ -108,7 +160,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/events" element={<Events />} />
                     <Route path="/events/:id" element={<EventDetails />} />
-                    
+
                     {/* Protected Routes */}
                     <Route
                       path="/dashboard"
@@ -134,7 +186,7 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
-                    
+
                     {/* Admin Routes */}
                     <Route
                       path="/admin/*"
@@ -144,7 +196,7 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
-                    
+
                     {/* 404 Route */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

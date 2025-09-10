@@ -1,7 +1,7 @@
 import React from 'react'
-import { Box, AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, Container } from '@mui/material'
+import { Box, AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, Container, Chip } from '@mui/material'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { AccountCircle, Event, Dashboard, ExitToApp } from '@mui/icons-material'
+import { AccountCircle, Event, Dashboard, ExitToApp, SwapHoriz } from '@mui/icons-material'
 import { useAuth } from '../../context/AuthContext'
 
 const Layout = ({ children }) => {
@@ -22,6 +22,25 @@ const Layout = ({ children }) => {
     logout()
     handleClose()
     navigate('/')
+  }
+
+  const toggleAuthState = () => {
+    if (isAuthenticated) {
+      logout()
+    } else {
+      // Mock login for development
+      const mockUser = {
+        id: 1,
+        name: 'John Doe',
+        email: 'john.doe@bitmesra.ac.in',
+        role: 'student',
+        department: 'Computer Science & Engineering',
+        year: '3rd Year',
+        rollNumber: '20BCS001'
+      }
+      // This would normally call the login function, but for development we'll just set auth state
+      // login({ email: 'john.doe@bitmesra.ac.in', password: 'password' })
+    }
   }
 
   const isActive = (path) => location.pathname === path
@@ -47,6 +66,20 @@ const Layout = ({ children }) => {
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {/* Development Auth Toggle */}
+              <Chip 
+                label={isAuthenticated ? 'Logged In' : 'Logged Out'}
+                color={isAuthenticated ? 'success' : 'default'}
+                size="small"
+                onClick={toggleAuthState}
+                icon={<SwapHoriz />}
+                sx={{ 
+                  cursor: 'pointer',
+                  '&:hover': { opacity: 0.8 },
+                  display: { xs: 'none', sm: 'flex' } // Hide on mobile
+                }}
+              />
+              
               <Button
                 color="inherit"
                 component={Link}
@@ -85,27 +118,48 @@ const Layout = ({ children }) => {
                     </Button>
                   )}
                   
+                  {user?.name && (
+                    <Typography variant="body2" sx={{ mr: 2, opacity: 0.9 }}>
+                      Welcome, {user.name.split(' ')[0]}!
+                    </Typography>
+                  )}
                   <IconButton
                     size="large"
                     onClick={handleMenu}
                     color="inherit"
+                    sx={{ 
+                      border: '2px solid rgba(255,255,255,0.2)',
+                      '&:hover': { borderColor: 'rgba(255,255,255,0.4)' }
+                    }}
                   >
                     {user?.avatar ? (
                       <Avatar src={user.avatar} sx={{ width: 32, height: 32 }} />
                     ) : (
-                      <AccountCircle />
+                      <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
+                        {user?.name?.charAt(0) || 'U'}
+                      </Avatar>
                     )}
                   </IconButton>
                   <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
+                    sx={{ mt: 1 }}
                   >
                     <MenuItem onClick={() => { navigate('/profile'); handleClose(); }}>
+                      <AccountCircle sx={{ mr: 2 }} />
                       Profile
                     </MenuItem>
+                    <MenuItem onClick={() => { navigate('/my-registrations'); handleClose(); }}>
+                      <Event sx={{ mr: 2 }} />
+                      My Events
+                    </MenuItem>
+                    <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); }}>
+                      <Dashboard sx={{ mr: 2 }} />
+                      Dashboard
+                    </MenuItem>
                     <MenuItem onClick={handleLogout}>
-                      <ExitToApp sx={{ mr: 1 }} />
+                      <ExitToApp sx={{ mr: 2 }} />
                       Logout
                     </MenuItem>
                   </Menu>

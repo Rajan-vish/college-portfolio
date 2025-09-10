@@ -4,10 +4,18 @@ import api from '../services/api'
 const AuthContext = createContext()
 
 const initialState = {
-  user: null,
-  token: localStorage.getItem('token'),
+  user: {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@bitmesra.ac.in',
+    role: 'student',
+    department: 'Computer Science & Engineering',
+    year: '3rd Year',
+    rollNumber: '20BCS001'
+  },
+  token: localStorage.getItem('token') || 'mock-dev-token',
   loading: false,
-  isAuthenticated: false
+  isAuthenticated: true // Set to true for development
 }
 
 const authReducer = (state, action) => {
