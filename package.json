@@ -1,0 +1,10 @@
+{
+  "name": "college-event-portal",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
+}
+
