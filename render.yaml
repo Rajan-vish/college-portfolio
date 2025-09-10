@@ -19,16 +19,13 @@ services:
       - key: CLIENT_URL
         value: https://college-event-portal-frontend.onrender.com
 
-  # Frontend Static Service
-  - type: static
+  # Frontend Web Service
+  - type: web
     name: college-event-portal-frontend
-    env: static
+    env: node
     plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/dist
-    buildFilter:
-      paths:
-        - frontend/**
+    buildCommand: cd frontend && npm install && npm run build && npm install -g serve
+    startCommand: serve -s frontend/dist -p $PORT
     envVars:
       - key: VITE_API_URL
         value: https://college-event-portal-api.onrender.com/api
