@@ -3,10 +3,9 @@ services:
   - type: web
     name: college-event-portal-api
     env: node
-    plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
-    healthCheckPath: /health
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: backend
     envVars:
       - key: NODE_ENV
         value: production
@@ -18,14 +17,3 @@ services:
         value: mongodb+srv://rajanvish2005:Ay2b3vylXNW53ghv@cluster1.4yireiy.mongodb.net/college-events
       - key: CLIENT_URL
         value: https://college-event-portal-frontend.onrender.com
-
-  # Frontend Web Service
-  - type: web
-    name: college-event-portal-frontend
-    env: node
-    plan: free
-    buildCommand: cd frontend && npm install && npm run build && npm install -g serve
-    startCommand: serve -s frontend/dist -p $PORT
-    envVars:
-      - key: VITE_API_URL
-        value: https://college-event-portal-api.onrender.com/api
