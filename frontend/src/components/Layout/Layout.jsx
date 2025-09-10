@@ -66,19 +66,6 @@ const Layout = ({ children }) => {
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              {/* Development Auth Toggle */}
-              <Chip 
-                label={isAuthenticated ? 'Logged In' : 'Logged Out'}
-                color={isAuthenticated ? 'success' : 'default'}
-                size="small"
-                onClick={toggleAuthState}
-                icon={<SwapHoriz />}
-                sx={{ 
-                  cursor: 'pointer',
-                  '&:hover': { opacity: 0.8 },
-                  display: { xs: 'none', sm: 'flex' } // Hide on mobile
-                }}
-              />
               
               <Button
                 color="inherit"

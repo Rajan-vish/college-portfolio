@@ -23,7 +23,7 @@ import { Search as SearchIcon, FilterList as FilterIcon, Refresh as RefreshIcon,
 import EventCard from '../../components/Dashboard/EventCard'
 import { useNotification } from '../../context/NotificationContext'
 import { useAuth } from '../../context/AuthContext'
-import { mockEventService } from '../../services/eventService'
+import { eventService } from '../../services/eventService'
 import { useNavigate } from 'react-router-dom'
 
 const Events = () => {
@@ -47,10 +47,70 @@ const Events = () => {
   const loadEvents = async () => {
     setLoading(true)
     try {
-      const response = await mockEventService.getAllEvents()
-      setEvents(response.data.events)
+      const response = await eventService.getAllEvents()
+      const events = response.data.events || response.data || []
+      setEvents(events)
+      console.log('Events: Loaded', events.length, 'events from API')
     } catch (err) {
-      showNotification('Failed to load events', 'error')
+      console.warn('Events: API failed, using mock data:', err.message)
+      showNotification('Loading offline events data', 'warning')
+      
+      // Use mock events data as fallback
+      const mockEvents = [
+        {
+          id: 1,
+          title: 'Technical Symposium 2024',
+          category: 'Technical',
+          datetime: '2024-03-15T09:00:00',
+          venue: 'Main Auditorium',
+          description: 'Annual technical symposium featuring innovative projects.',
+          image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=300&fit=crop',
+          registeredCount: 245,
+          maxCapacity: 500,
+          isRegistered: false,
+          status: 'open'
+        },
+        {
+          id: 2,
+          title: 'Cultural Night - Bitotsav',
+          category: 'Cultural',
+          datetime: '2024-03-20T18:00:00',
+          venue: 'Open Air Theatre',
+          description: 'Grand cultural celebration with music, dance, and entertainment.',
+          image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=500&h=300&fit=crop',
+          registeredCount: 892,
+          maxCapacity: 1000,
+          isRegistered: false,
+          status: 'open'
+        },
+        {
+          id: 3,
+          title: 'Sports Meet 2024',
+          category: 'Sports',
+          datetime: '2024-03-25T08:00:00',
+          venue: 'Sports Complex',
+          description: 'Inter-college sports competition across multiple disciplines.',
+          image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop',
+          registeredCount: 156,
+          maxCapacity: 300,
+          isRegistered: true,
+          status: 'open'
+        },
+        {
+          id: 4,
+          title: 'Hackathon - CodeCrush',
+          category: 'Technical',
+          datetime: '2024-04-01T10:00:00',
+          venue: 'Computer Center',
+          description: '48-hour coding marathon to build innovative solutions.',
+          image: 'https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?w=500&h=300&fit=crop',
+          registeredCount: 78,
+          maxCapacity: 100,
+          isRegistered: false,
+          status: 'upcoming'
+        }
+      ]
+      setEvents(mockEvents)
     } finally {
       setLoading(false)
     }
@@ -89,7 +149,7 @@ const Events = () => {
       return
     }
     try {
-      await mockEventService.registerForEvent(eventId)
+      await eventService.registerForEvent(eventId)
       showNotification('Registered successfully', 'success')
       setEvents(prev => prev.map(e => e.id === eventId ? { ...e, isRegistered: true, registeredCount: e.registeredCount + 1 } : e))
     } catch (err) {
@@ -99,7 +159,7 @@ const Events = () => {
 
   const handleUnregister = async (eventId) => {
     try {
-      await mockEventService.unregisterFromEvent(eventId)
+      await eventService.unregisterFromEvent(eventId)
       showNotification('Unregistered successfully', 'info')
       setEvents(prev => prev.map(e => e.id === eventId ? { ...e, isRegistered: false, registeredCount: Math.max(0, e.registeredCount - 1) } : e))
     } catch (err) {

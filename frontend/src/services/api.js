@@ -24,6 +24,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Handle network errors gracefully in development
+    if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+      console.warn('Backend not available, using mock data')
+      return Promise.reject(new Error('Backend not available'))
+    }
+    
     if (error.response?.status === 401) {
       // Token expired or invalid
       localStorage.removeItem('token')

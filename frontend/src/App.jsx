@@ -23,6 +23,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import AdminDashboard from './pages/Admin/AdminDashboard'
 import Profile from './pages/Profile/Profile'
 import MyRegistrations from './pages/Registrations/MyRegistrations'
+// import AuthDebug from './pages/Debug/AuthDebug'
 import NotFound from './pages/NotFound/NotFound'
 
 // Create dark theme
@@ -160,6 +161,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/events" element={<Events />} />
                     <Route path="/events/:id" element={<EventDetails />} />
+                    {/* <Route path="/debug" element={<AuthDebug />} /> */}
 
                     {/* Protected Routes */}
                     <Route

@@ -1,6 +1,6 @@
 import api from './api'
 
-// Event CRUD operations
+// Real Event CRUD operations with backend
 export const eventService = {
   // Get all events
   getAllEvents: async (params = {}) => {

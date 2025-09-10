@@ -28,12 +28,18 @@ const Login = () => {
     setError('')
     setLoading(true)
 
+    console.log('Login: Starting login process with:', { email: formData.email })
+
     try {
+      console.log('Login: Calling auth login function...')
       await login(formData)
+      console.log('Login: Login successful, navigating...')
       showNotification('Login successful!', 'success')
       navigate(from, { replace: true })
     } catch (error) {
-      setError(error.response?.data?.message || 'Login failed')
+      console.error('Login: Login failed:', error)
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

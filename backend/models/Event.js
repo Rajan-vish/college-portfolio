@@ -36,6 +36,11 @@ const eventSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
+  slug: {
+    type: String,
+    unique: true,
+    lowercase: true
+  },
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -229,8 +234,17 @@ eventSchema.index({ 'dateTime.registrationDeadline': 1 })
 eventSchema.index({ organizer: 1 })
 eventSchema.index({ visibility: 1 })
 
-// Validate end date is after start date
+// Generate slug from title
 eventSchema.pre('save', function(next) {
+  if (this.isModified('title') && !this.slug) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+  }
+  
+  // Validate end date is after start date
   if (this.dateTime.end <= this.dateTime.start) {
     return next(new Error('End date must be after start date'))
   }

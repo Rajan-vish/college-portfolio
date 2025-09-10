@@ -32,12 +32,18 @@ const Register = () => {
     setError('')
     setLoading(true)
 
+    console.log('Register: Starting registration process with:', { email: formData.email, name: formData.name })
+
     try {
+      console.log('Register: Calling auth register function...')
       await register(formData)
+      console.log('Register: Registration successful, navigating...')
       showNotification('Registration successful!', 'success')
       navigate('/dashboard')
     } catch (error) {
-      setError(error.response?.data?.message || 'Registration failed')
+      console.error('Register: Registration failed:', error)
+      const errorMessage = error.response?.data?.message || error.message || 'Registration failed'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

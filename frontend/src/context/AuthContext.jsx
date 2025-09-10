@@ -4,18 +4,10 @@ import api from '../services/api'
 const AuthContext = createContext()
 
 const initialState = {
-  user: {
-    id: 1,
-    name: 'John Doe',
-    email: 'john.doe@bitmesra.ac.in',
-    role: 'student',
-    department: 'Computer Science & Engineering',
-    year: '3rd Year',
-    rollNumber: '20BCS001'
-  },
-  token: localStorage.getItem('token') || 'mock-dev-token',
+  user: null,
+  token: localStorage.getItem('token'),
   loading: false,
-  isAuthenticated: true // Set to true for development
+  isAuthenticated: !!localStorage.getItem('token')
 }
 
 const authReducer = (state, action) => {
@@ -47,8 +39,10 @@ export const AuthProvider = ({ children }) => {
     if (state.token) {
       localStorage.setItem('token', state.token)
       api.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
-      // Load user profile on app start if token exists
-      loadUser()
+      // Only load user if we don't already have user data
+      if (!state.user) {
+        loadUser()
+      }
     } else {
       localStorage.removeItem('token')
       delete api.defaults.headers.common['Authorization']
@@ -66,20 +60,27 @@ export const AuthProvider = ({ children }) => {
         payload: { user: response.data.data.user, token: state.token }
       })
     } catch (error) {
-      console.error('Load user error:', error)
+      console.error('Load user error:', error.response?.data || error.message)
+      // If profile loading fails, clear the invalid token
+      localStorage.removeItem('token')
       dispatch({ type: 'AUTH_ERROR' })
     }
   }
 
   const login = async (credentials) => {
     try {
+      console.log('AuthContext: Starting login...')
       dispatch({ type: 'AUTH_START' })
       const response = await api.post('/auth/login', credentials)
+      console.log('AuthContext: Login API response:', response.data)
+      
       const { user, token } = response.data.data
       
       dispatch({ type: 'AUTH_SUCCESS', payload: { user, token } })
+      console.log('AuthContext: Login successful')
       return { success: true }
     } catch (error) {
+      console.error('AuthContext: Login error:', error.response?.data || error.message)
       dispatch({ type: 'AUTH_ERROR' })
       throw error
     }
@@ -87,13 +88,18 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
+      console.log('AuthContext: Starting registration...')
       dispatch({ type: 'AUTH_START' })
       const response = await api.post('/auth/register', userData)
+      console.log('AuthContext: Registration API response:', response.data)
+      
       const { user, token } = response.data.data
       
       dispatch({ type: 'AUTH_SUCCESS', payload: { user, token } })
+      console.log('AuthContext: Registration successful')
       return { success: true }
     } catch (error) {
+      console.error('AuthContext: Registration error:', error.response?.data || error.message)
       dispatch({ type: 'AUTH_ERROR' })
       throw error
     }
