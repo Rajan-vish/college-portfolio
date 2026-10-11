@@ -1,191 +1,155 @@
-# College Event Management Portal
+# 🎓 CampusSync — Real-Time College Event Management Portal
 
-A comprehensive MERN stack web application for managing college events with real-time notifications and admin dashboard.
+A full-stack event discovery and administration platform built with the **MERN** stack, **Socket.io**, and **Docker**. CampusSync simplifies campus event discovery and attendance management for students while giving university administrators real-time analytics and participant control.
 
-## 🚀 Features
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Material UI](https://img.shields.io/badge/MUI-v5-007FFF?style=for-the-badge&logo=mui&logoColor=white)](https://mui.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express-4.x-black?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![Socket.io](https://img.shields.io/badge/WebSockets-Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-### Student Features
-- **Event Discovery**: Browse and search upcoming college events
-- **Easy Registration**: One-click event registration with form validation
-- **Real-time Updates**: Instant notifications for event changes
-- **Personal Dashboard**: View registered events and attendance history
-- **Responsive Design**: Mobile-first design for all devices
+---
 
-### Admin Features
-- **Event Management**: Create, edit, delete, and manage events
-- **Registration Analytics**: Track registration statistics and trends
-- **User Management**: Manage student accounts and permissions
-- **Real-time Dashboard**: Live updates on event registrations
-- **Bulk Operations**: Export data and send bulk notifications
+## 🌟 Key Highlights & System Capabilities
 
-### Technical Features
-- **Secure Authentication**: JWT-based auth with role-based access control
-- **Real-time Communication**: Socket.io for instant updates
-- **Responsive UI**: Modern, mobile-first design
-- **Cloud Database**: MongoDB Atlas integration
-- **Fast Performance**: Optimized API endpoints and caching
-- **Scalable Architecture**: Microservices-ready structure
+- ⚡ **Bi-Directional Real-Time Communications**: Powered by **Socket.io** WebSockets, instantly broadcasting event creation, schedule changes, seat vacancy counters, and registration notifications without page refreshes.
+- 👥 **Role-Based Access Control (RBAC)**: Distinct permission workflows for Students (registration, personal attendance passport) and Admins (event CRUD, attendance roster exports, capacity limits).
+- 🎨 **Modern Accessible UI**: Designed with Material-UI (MUI v5) following responsive mobile-first patterns and WCAG accessibility standards.
+- 🐳 **Containerized Deployment**: Ready-to-deploy multi-container orchestration with Docker and Docker Compose.
+- 🔐 **Security Best Practices**: Stateless JWT authentication, bcrypt salt rounds for password safety, and Multer file upload validation for event promotional banners.
 
-## 🛠️ Tech Stack
+---
 
-### Frontend
-- **React 18**: Latest React with hooks and context
-- **Material-UI**: Modern component library
-- **React Router v6**: Client-side routing
-- **Axios**: HTTP client for API calls
-- **Socket.io Client**: Real-time communication
-- **React Hook Form**: Form handling and validation
-
-### Backend
-- **Node.js**: JavaScript runtime
-- **Express.js**: Web application framework
-- **MongoDB**: NoSQL database
-- **Mongoose**: ODM for MongoDB
-- **JWT**: Authentication tokens
-- **Socket.io**: Real-time communication
-- **Bcrypt**: Password hashing
-- **Multer**: File upload handling
-
-## 🏗️ Project Structure
+## 🏛️ System Architecture
 
 ```
-college-event-portal/
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   └── server.js
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── context/
-│   │   ├── services/
-│   │   └── utils/
-│   └── package.json
-├── docker-compose.yml
-└── README.md
+┌────────────────────────────────────────────────────────┐
+│             Student & Admin Client (React 18)          │
+│  • Material-UI Design System   • React Hook Form       │
+│  • Socket.io Client Listener   • Axios HTTP Interceptor│
+└───────────────┬────────────────────────┬───────────────┘
+                │ HTTP REST Requests     │ WebSocket Events
+                ▼                        ▼
+┌────────────────────────────────────────────────────────┐
+│            Event Backend (Node.js + Express)           │
+│  • JWT Authentication Middleware                       │
+│  • Socket.io Server (Real-time Broadcast Hub)          │
+│  • Event & Registration Controllers                    │
+└───────────────┬────────────────────────┬───────────────┘
+                │                        │
+        ┌───────▼────────┐       ┌───────▼────────┐
+        │  MongoDB Atlas │       │  Local Storage │
+        │  (Users, Events│       │  / Cloudinary  │
+        │  Registrations)│       │ (Event Posters)│
+        └────────────────┘       └────────────────┘
 ```
 
-## 🚦 Getting Started
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies | Role / Rationale |
+|---|---|---|
+| **Frontend** | React 18, React Router v6 | Declarative component hierarchy and client-side routing |
+| **Component Library** | Material-UI (MUI v5), Emotion | Pre-built accessible UI primitives with responsive theming |
+| **Real-Time Layer** | Socket.io Client & Server | Low-latency bi-directional event notifications |
+| **Backend Runtime** | Node.js, Express.js | High-throughput asynchronous event handling |
+| **Database** | MongoDB Atlas, Mongoose | Schema-validated NoSQL persistence |
+| **DevOps & Containers**| Docker, Docker Compose | Consistent multi-environment runtime encapsulation |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- MongoDB Atlas account (provided)
+- Node.js (v18+)
+- MongoDB Atlas cluster URL (or local MongoDB daemon)
+- Docker & Docker Compose (optional for containerized run)
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Rajan-vish/college-event-portal.git
-   cd college-event-portal
-   ```
-
-2. **Install Backend Dependencies**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Install Frontend Dependencies**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
-
-4. **Environment Setup**
-   Create `.env` files in both backend and frontend directories with required configurations.
-
-5. **Start Development Servers**
-   ```bash
-   # Backend (from backend directory)
-   npm run dev
-   
-   # Frontend (from frontend directory)
-   npm start
-   ```
-
-## 🔧 Configuration
-
-### Environment Variables
-Create `.env` file in backend directory:
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Rajan-vish/college-portfolio.git
+cd college-portfolio
 ```
-MONGODB_URI=mongodb+srv://rajanvish2005:Ay2b3vylXNW53ghv@cluster1.4yireiy.mongodb.net/
-JWT_SECRET=your_jwt_secret
+
+### 2. Local Development Setup
+
+**Backend Setup:**
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in `backend/`:
+```env
 PORT=5000
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
 ```
 
-## 📱 API Documentation
+Start the backend server:
+```bash
+npm run dev
+```
 
-### Authentication Endpoints
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/profile` - Get user profile
+**Frontend Setup:**
+In a separate terminal:
+```bash
+cd ../frontend
+npm install
+```
 
-### Event Endpoints
-- `GET /api/events` - Get all events
-- `POST /api/events` - Create new event (Admin only)
-- `PUT /api/events/:id` - Update event (Admin only)
-- `DELETE /api/events/:id` - Delete event (Admin only)
+Create a `.env` file in `frontend/`:
+```env
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_SOCKET_URL=http://localhost:5000
+```
 
-### Registration Endpoints
-- `POST /api/registrations` - Register for event
-- `GET /api/registrations/user/:userId` - Get user registrations
-- `GET /api/registrations/event/:eventId` - Get event registrations (Admin only)
+Start the frontend application:
+```bash
+npm start
+```
 
-## 🎨 UI/UX Features
+Visit `http://localhost:3000` in your browser.
 
-- **Modern Design**: Clean, professional interface
-- **Dark/Light Mode**: Theme switching capability
-- **Accessibility**: WCAG compliant design
-- **Progressive Web App**: PWA capabilities for mobile
-- **Optimistic UI**: Instant feedback for user actions
+---
 
-## 🚀 Deployment
+### 3. Docker Compose Orchestration
 
-### Docker Deployment
+To run the complete ecosystem (frontend and backend) with Docker:
 ```bash
 docker-compose up --build
 ```
 
-### Manual Deployment
-1. Build frontend: `npm run build`
-2. Deploy to hosting service (Heroku, Vercel, etc.)
-3. Configure environment variables
-4. Set up MongoDB Atlas connection
+---
 
-## 🤝 Contributing
+## 📡 API Specification
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+### Authentication
+- `POST /api/auth/register` — Register a new student or organizer account
+- `POST /api/auth/login` — Sign in and receive JWT token
+- `GET /api/auth/profile` — Fetch authenticated user details
 
-## 📄 License
+### Events
+- `GET /api/events` — Retrieve list of active college events
+- `POST /api/events` — Create a new event listing (Admin only)
+- `PUT /api/events/:id` — Update event details (Admin only)
+- `DELETE /api/events/:id` — Cancel/delete event (Admin only)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Team
-
-- **Developer**: Rajan Vish
-- **GitHub**: [@Rajan-vish](https://github.com/Rajan-vish)
-
-## 🔮 Future Enhancements
-
-- Mobile app development
-- AI-powered event recommendations
-- Integration with calendar applications
-- Advanced analytics and reporting
-- Multi-language support
-- Payment integration for paid events
+### Registrations
+- `POST /api/registrations` — Register for an event
+- `GET /api/registrations/user/:userId` — Retrieve user's registration history
+- `GET /api/registrations/event/:eventId` — Retrieve attendee list for an event (Admin only)
 
 ---
 
-**Made with ❤️ for college communities**
+## 👨‍💻 Author
+
+**Rajan Kumar Vishwakarma**
+- GitHub: [@Rajan-vish](https://github.com/Rajan-vish)
+- Email: [rajanvish2005@gmail.com](mailto:rajanvish2005@gmail.com)
+- LinkedIn: [linkedin.com/in/rajan-kumar-vishwakarma-1a4bb92a8](https://www.linkedin.com/in/rajan-kumar-vishwakarma-1a4bb92a8/)
+- Codeforces: [rajan_pant (Specialist - 1420)](https://codeforces.com/profile/rajan_pant)
+- LeetCode: [unbitten (614+ Solved)](https://leetcode.com/u/unbitten/)
